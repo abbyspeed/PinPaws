@@ -1,26 +1,20 @@
 import { useThree } from '@react-three/fiber'
 import { Text3D, useTexture } from '@react-three/drei'
-import { Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 
 export default function Title() {
-  return (
-    <Suspense>
-      <TitleContent />
-    </Suspense>
-  )
-}
-
-function TitleContent() {
   const matcapTexture = useTexture('./textures/5.png')
   
   const sharedMaterial = useMemo(() => ({
     matcap: matcapTexture
   }), [matcapTexture])
   
+  const fontPath = `${import.meta.env.BASE_URL || '/'}fonts/bubbleFont.json`
+  
   return (
     <>
       <Text3D 
-        font={`${import.meta.env.BASE_URL}fonts/bubbleFont.json`}
+        font={fontPath}
         size={0.5}
         height={0.1}
         curveSegments={8}
@@ -38,7 +32,7 @@ function TitleContent() {
       </Text3D>
       
       <Text3D 
-        font={`${import.meta.env.BASE_URL}fonts/bubbleFont.json`}
+        font={fontPath}
         size={0.2}
         height={0.05}
         curveSegments={6}

@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useRef, memo, useMemo } from 'react'
+import { useRef, memo, useMemo, useEffect } from 'react'
 
 const HeartInstance = memo(({ index, heartScene }) => {
     const heartRef = useRef()
@@ -20,7 +20,7 @@ const HeartInstance = memo(({ index, heartScene }) => {
             Math.random() * Math.PI,
             0
         ]
-    }), []) // Empty dependency array - these values should never change
+    }), [])
     
     useFrame(({ clock }) => {
         if (heartRef.current) {
@@ -47,6 +47,25 @@ const HeartInstance = memo(({ index, heartScene }) => {
 
 export default memo(function Heart(){
     const heart = useGLTF(`${import.meta.env.BASE_URL}Heart/heart.gltf`)
+
+    useEffect(() => {
+        return () => {
+            if (heart.scene) {
+                heart.scene.traverse((child) => {
+                    if (child.geometry) {
+                        child.geometry.dispose()
+                    }
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(material => material.dispose())
+                        } else {
+                            child.material.dispose()
+                        }
+                    }
+                })
+            }
+        }
+    }, [heart])
     
     const heartInstances = useMemo(() => 
         [...Array(20)].map((_, index) => (

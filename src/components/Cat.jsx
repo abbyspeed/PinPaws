@@ -47,6 +47,34 @@ export default function Cat({
     }
   }, [currentAnimation, greetingAction])
 
+  useEffect(() => {
+    return () => {
+      if (animations && animations.actions) {
+        Object.values(animations.actions).forEach(action => {
+          if (action) {
+            action.stop()
+            action.reset()
+          }
+        })
+      }
+      
+      if (cat.scene) {
+        cat.scene.traverse((child) => {
+          if (child.geometry) {
+            child.geometry.dispose()
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(material => material.dispose())
+            } else {
+              child.material.dispose()
+            }
+          }
+        })
+      }
+    }
+  }, [animations, cat.scene])
+
   const handlePointerEnter = () => {
     if (catRef.current && isSleeping) {
       catRef.current.rotation.y = -0.55

@@ -1,7 +1,7 @@
 import './styles/style.css'
 import ReactDOM from 'react-dom/client'
 import { Canvas } from '@react-three/fiber'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Core from './Core.jsx'
 import Match from './Match.jsx'
 import Copyright from './components/Copyright.jsx'
@@ -12,6 +12,19 @@ function App() {
     const handleLearnMore = () => {
         setShowMatch(true)
     }
+
+    // Global cleanup
+    useEffect(() => {
+        if (showMatch) {
+            const timer = setTimeout(() => {
+                if (window.gc) {
+                    window.gc()
+                }
+            }, 100)
+            
+            return () => clearTimeout(timer)
+        }
+    }, [showMatch])
 
     if (showMatch) {
         return <Match />

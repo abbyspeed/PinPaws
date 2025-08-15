@@ -1,4 +1,4 @@
-import { Suspense, useState, useRef, useMemo, useCallback } from 'react'
+import { Suspense, useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { Center, OrbitControls } from '@react-three/drei'
 import Title from './components/Title.jsx'
 import Cat from './components/Cat.jsx';
@@ -12,6 +12,19 @@ export default function Core({ onLearnMore }) {
   const [showInstructions, setShowInstructions] = useState(false)
   const [musicStarted, setMusicStarted] = useState(false)
   const audioRef = useRef()
+  
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        if (audioRef.current.stop) {
+          audioRef.current.stop()
+        }
+        if (audioRef.current.context) {
+          audioRef.current.context.close?.()
+        }
+      }
+    }
+  }, [])
   
   const handlePlayClick = useCallback(() => {
     setShowInstructions(true)
