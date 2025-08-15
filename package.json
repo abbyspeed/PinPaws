@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://abbyspeed.github.io/pinpaws",
+  "homepage": "https://abbyspeed.github.io/PinPaws",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
