@@ -46,7 +46,7 @@ const HeartInstance = memo(({ index, heartScene }) => {
 })
 
 export default memo(function Heart(){
-    const heart = useGLTF('/assets/Heart/heart.gltf')
+    const heart = useGLTF('/Heart/heart.gltf')
     
     const heartInstances = useMemo(() => 
         [...Array(20)].map((_, index) => (
