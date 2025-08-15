@@ -66,6 +66,8 @@ export default function Match() {
     if (!audioEnabled || !audioRef.current) return
     
     try {
+      // Stop current playback and reset for consistent playback
+      audioRef.current.pause()
       audioRef.current.currentTime = 0
       
       const playPromise = audioRef.current.play()
