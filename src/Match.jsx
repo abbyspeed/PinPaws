@@ -161,7 +161,7 @@ export default function Match() {
 
       {isComplete && (
         <div className="match-complete">
-          <h2>All cats have been reviewed! 🐾</h2>
+          <h2>You have reached the end 🐾</h2>
           <button 
             className="summary-button"
             onClick={handleShowSummary}

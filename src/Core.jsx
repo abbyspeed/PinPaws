@@ -87,7 +87,7 @@ export default function Core({ onLearnMore }) {
           position={[0, -1.1, 0]}
           text="Hello, I am Abby 👋🏻"
           text2="Are you a cat lover? Let's find out!"
-          btnText="Click to start"
+          btnText="Start"
           onButtonClick={handleLearnMore}
         />
       )}
