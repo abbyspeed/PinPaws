@@ -15,18 +15,14 @@ export default function Match() {
   const [bgColor, setBgColor] = useState('#ffffff')
   const [showSummary, setShowSummary] = useState(false)
   
-  // Track used names and bios globally
   const usedNames = useRef([])
   const usedBios = useRef([])
 
-  // Update cards when API data loads
   useEffect(() => {
     if (apiCats.length > 0) {
-      // Reset tracking arrays when new data loads
       usedNames.current = []
       usedBios.current = []
       
-      // Generate unique cards
       const uniqueCards = apiCats.map((cat, index) => 
         generateUniqueCard(cat, index, usedNames.current, usedBios.current)
       )
@@ -36,23 +32,21 @@ export default function Match() {
     }
   }, [apiCats])
 
-  // Memoized audio play function to prevent recreation
   const playMeowSound = useCallback(() => {
     try {
       const audio = new Audio('./audio/meow.mp3')
       audio.volume = 1
       audio.play().catch(() => {
-        // Silently handle audio play failures
+        // console.log('Failed to play meow sound')
       })
     } catch (err) {
-      // Silently handle audio creation failures
+      // console.error('Error playing meow sound:', err)
     }
   }, [])
 
   const handleSwipe = useCallback((cardId, direction) => {
     const swipedCard = cards.find(card => card.id === cardId)
     
-    // Track right-swiped cats for the gallery
     if (direction > 0 && swipedCard) {
       setRightSwipedCats(prev => [...prev, swipedCard])
       playMeowSound()
@@ -70,12 +64,10 @@ export default function Match() {
     setShowSummary(true)
   }, [])
 
-  // Show Summary if requested
   if (showSummary) {
     return <Summary rightSwipedCats={rightSwipedCats} />
   }
 
-  // Show loading state
   if (loading) {
     return (
       <div className="match-container" style={{ backgroundColor: bgColor }}>
@@ -84,7 +76,6 @@ export default function Match() {
     )
   }
 
-  // Show error state but still render if we have fallback data
   if (error && cards.length === 0) {
     return (
       <div className="match-container" style={{ backgroundColor: bgColor }}>
@@ -100,7 +91,33 @@ export default function Match() {
 
   return (
     <div className="match-container" style={{ backgroundColor: bgColor }}>
-      {/* Show cards only if there are cards remaining */}
+      {/* Swipe Instructions */}
+      {cards.length > 0 && (
+        <div className="swipe-instructions" style={{
+          position: 'absolute',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(255, 255, 255, 0.9)',
+          padding: '12px 24px',
+          borderRadius: '25px',
+          fontSize: '16px',
+          fontWeight: '500',
+          color: '#333',
+          textAlign: 'center',
+          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+          zIndex: 1000,
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <span>✖️</span>
+          <span style={{ margin: '0 5px' }}>Swipe your kitty</span>
+          <span>❤️</span>
+        </div>
+      )}
+
       {cards.length > 0 && (
         <div className="cards-stack">
           {cards.map((card, index) => (
@@ -116,7 +133,6 @@ export default function Match() {
         </div>
       )}
 
-      {/* Summary Button - show after all initial cards are swiped */}
       {isComplete && (
         <div className="match-complete">
           <h2>All cats have been reviewed! 🐾</h2>
