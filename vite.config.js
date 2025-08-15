@@ -46,14 +46,8 @@ export default {
                 }
             }
         },
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true,
-                drop_debugger: true
-            }
-        },
-        assetsInlineLimit: 4096,
+        minify: 'esbuild',
+        assetsInlineLimit: 4096, 
         chunkSizeWarningLimit: 1000
     },
 }
