@@ -9,7 +9,7 @@ export default function Cat({
   instructionMessage = "",
   position = [0, -3, 0]
 }) {
-  const cat = useGLTF('./assets/Cat/cat.gltf')
+  const cat = useGLTF('/assets/Cat/cat.gltf')
   const animations = useAnimations(cat.animations, cat.scene)
   const [isHovered, setIsHovered] = useState(false)
   const catRef = useRef()

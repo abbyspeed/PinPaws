@@ -20,7 +20,7 @@ function TitleContent() {
   return (
     <>
       <Text3D 
-        font='./assets/fonts/bubbleFont.json'
+        font='/assets/fonts/bubbleFont.json'
         size={0.5}
         height={0.1}
         curveSegments={8}
@@ -38,7 +38,7 @@ function TitleContent() {
       </Text3D>
       
       <Text3D 
-        font='./assets/fonts/bubbleFont.json'
+        font='/assets/fonts/bubbleFont.json'
         size={0.2}
         height={0.05}
         curveSegments={6}
