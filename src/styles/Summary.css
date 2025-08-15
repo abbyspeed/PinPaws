@@ -1,0 +1,51 @@
+.summary-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+}
+
+/* Summary Button (for Match.jsx) */
+.summary-button {
+  color: black;
+  background: #d29c9c;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.summary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Left side - 3D Cat Model */
+.summary-left {
+  width: 50%;
+  height: 100%;
+  position: relative;
+}
+
+/* Right side - Gallery */
+.summary-right {
+  width: 50%;
+  height: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .summary-container {
+    flex-direction: column;
+  }
+  
+  .summary-left,
+  .summary-right {
+    width: 100%;
+    height: 50vh;
+  }
+}

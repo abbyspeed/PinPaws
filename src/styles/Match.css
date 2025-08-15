@@ -1,0 +1,37 @@
+.match-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.match-complete {
+  text-align: center;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.match-complete h2 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0 0 2rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cards-stack {
+  position: relative;
+  width: 300px;
+  height: 400px;
+}
+
+.loading-message {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}

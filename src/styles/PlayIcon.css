@@ -1,0 +1,14 @@
+.play-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0.9;
+}
+
+.play-icon:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.play-icon svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}

@@ -1,0 +1,40 @@
+.copyright {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 10px;
+  color: #999;
+  /* background: rgba(255, 255, 255, 0.8); */
+  padding: 4px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  font-family: system-ui, -apple-system, sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+.copyright-name {
+  font-weight: bold;
+  color: #ff6b9d;
+  text-shadow: 0 0 8px rgba(255, 107, 157, 0.6);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.copyright-name:hover {
+  color: #ff4081;
+  text-shadow: 0 0 12px rgba(255, 107, 157, 0.8);
+  transform: scale(1.05);
+}
+
+.copyright-name-pink-bg {
+  color: #333 !important;
+}
+
+.copyright-name-pink-bg:hover {
+  color: #222 !important;
+  text-shadow: 0 0 12px rgba(51, 51, 51, 0.8);
+  transform: scale(1.05);
+}
