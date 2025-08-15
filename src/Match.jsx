@@ -39,7 +39,7 @@ export default function Match() {
   // Memoized audio play function to prevent recreation
   const playMeowSound = useCallback(() => {
     try {
-      const audio = new Audio('/audio/meow.mp3')
+      const audio = new Audio('./audio/meow.mp3')
       audio.volume = 1
       audio.play().catch(() => {
         // Silently handle audio play failures

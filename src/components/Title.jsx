@@ -1,5 +1,5 @@
-import { Text3D, useTexture } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
+import { Text3D, useTexture } from '@react-three/drei'
 import { Suspense, useMemo } from 'react'
 
 export default function Title() {
@@ -11,9 +11,8 @@ export default function Title() {
 }
 
 function TitleContent() {
-  const matcapTexture = useTexture('/textures/5.png')
+  const matcapTexture = useTexture('./textures/5.png')
   
-  // Memoize shared material to prevent recreation
   const sharedMaterial = useMemo(() => ({
     matcap: matcapTexture
   }), [matcapTexture])

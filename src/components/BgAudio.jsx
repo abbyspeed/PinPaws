@@ -33,7 +33,7 @@ export default forwardRef(function BgAudio({ startMusic = false, volume = 0.5 },
         soundRef.current = sound
 
         const audioLoader = new THREE.AudioLoader()
-        audioLoader.load('/audio/lounge.mp3', 
+        audioLoader.load('./audio/lounge.mp3', 
             (buffer) => {
                 console.log('Three.js audio loaded successfully')
                 sound.setBuffer(buffer)

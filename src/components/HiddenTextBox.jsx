@@ -1,4 +1,5 @@
 import { Html } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
 import '../styles/HiddenTextBox.css'
 
 export default function HiddenTextBox({ 
@@ -6,21 +7,26 @@ export default function HiddenTextBox({
   text = "Click me for surprise!",
   position = [0, 0, 0]
 }) {
-  if (!isVisible) return null
 
-  return (
-    <Html
-      position={position}
-      center
-      distanceFactor={8}
-      style={{
-        pointerEvents: 'none',
-        userSelect: 'none'
-      }}
-    >
-      <div className="hidden-text-box">
-        {text}
-      </div>
-    </Html>
-  )
+  const hasHover = window.matchMedia('(hover: hover)').matches
+  
+  if (!hasHover || isVisible) {
+    return (
+      <Html
+        position={position}
+        center
+        distanceFactor={8}
+        style={{
+          pointerEvents: 'none',
+          userSelect: 'none'
+        }}
+      >
+        <div className="hidden-text-box">
+          {text}
+        </div>
+      </Html>
+    )
+  }
+  
+  return null
 }

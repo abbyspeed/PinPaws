@@ -3,7 +3,7 @@ import { transformWithEsbuild } from 'vite'
 import restart from 'vite-plugin-restart'
 
 export default {
-    base: '/pinpaws/',
+    base: '/PinPaws/',
     root: 'src/',
     publicDir: '../public/',
     plugins:

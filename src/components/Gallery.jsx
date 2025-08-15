@@ -5,7 +5,6 @@ import '../styles/gallery.css'
 export default function Gallery({ rightSwipedCats = [] }) {
   const [loadingImages, setLoadingImages] = useState({})
 
-  // Memoize gallery items to prevent unnecessary re-renders
   const galleryItems = useMemo(() => {
     return rightSwipedCats.map((cat) => {
       const imageHandlers = createImageLoadHandlers(setLoadingImages, cat.id)

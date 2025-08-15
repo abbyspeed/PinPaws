@@ -7,6 +7,7 @@ import Heart from './components/Heart.jsx';
 import BgAudio from './components/BgAudio.jsx';
 import InstructionsBox from './components/InstructionsBox.jsx';
 import PlayIcon from './components/PlayIcon.jsx';
+import Loader from './components/Loader.jsx';
 
 export default function Core({ onLearnMore }) {
   const [showInstructions, setShowInstructions] = useState(false)
@@ -16,21 +17,18 @@ export default function Core({ onLearnMore }) {
   const handlePlayClick = useCallback(() => {
     setShowInstructions(true)
     setMusicStarted(true)
-    // Start music
     if (audioRef.current && audioRef.current.context) {
       audioRef.current.context.resume()
     }
   }, [])
   
   const handleLearnMore = useCallback(() => {
-    // Stop the audio before transitioning
     if (audioRef.current && audioRef.current.stop) {
       audioRef.current.stop()
     }
     onLearnMore()
   }, [onLearnMore])
 
-  // Memoize static components to prevent re-renders
   const memoizedHeart = useMemo(() => <Heart />, [])
   const memoizedCat = useMemo(() => <Cat />, [])
   const memoizedTitle = useMemo(() => (
@@ -38,12 +36,14 @@ export default function Core({ onLearnMore }) {
       <Title />
     </Center>
   ), [])
+
   const memoizedLights = useMemo(() => (
     <>
       <directionalLight position={[1, 2, 3]} intensity={1.5} />
       <ambientLight intensity={0.5} />
     </>
   ), [])
+  
   const memoizedControls = useMemo(() => (
     <OrbitControls 
       makeDefault
@@ -58,29 +58,29 @@ export default function Core({ onLearnMore }) {
     
     <BgAudio ref={audioRef} startMusic={musicStarted} />
     
-    {memoizedTitle}
-    {memoizedCat}
-    
-    {/* Simple Play Icon - shows first */}
-    {!showInstructions && (
-      <PlayIcon 
-        position={[0, -1.1, 0]}
-        onPlayClick={handlePlayClick}
-      />
-    )}
-    
-    {/* Instructions Box - shows after play is clicked */}
-    {showInstructions && (
-      <InstructionsBox 
-        use3D={true}
-        position={[0, -1.1, 0]}
-        text="Hello, I am Abby 👋🏻"
-        text2="Are you a cat lover? Let's find out!"
-        btnText="Click to start"
-        onButtonClick={handleLearnMore}
-      />
-    )}
-    
-    {memoizedHeart}
+    <Suspense fallback={<Loader />}>
+      {memoizedTitle}
+      {memoizedCat}
+      
+      {!showInstructions && (
+        <PlayIcon 
+          position={[0, -1.1, 0]}
+          onPlayClick={handlePlayClick}
+        />
+      )}
+      
+      {showInstructions && (
+        <InstructionsBox 
+          use3D={true}
+          position={[0, -1.1, 0]}
+          text="Hello, I am Abby 👋🏻"
+          text2="Are you a cat lover? Let's find out!"
+          btnText="Click to start"
+          onButtonClick={handleLearnMore}
+        />
+      )}
+      
+      {memoizedHeart}
+    </Suspense>
   </>
 }

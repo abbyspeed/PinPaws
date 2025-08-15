@@ -1,6 +1,5 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react'
+import { useMemo, useRef, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
 import Cat from './components/Cat.jsx'
 import Gallery from './components/Gallery.jsx'
 import InstructionsBox from './components/InstructionsBox.jsx'
@@ -24,11 +23,9 @@ export default function Summary({ rightSwipedCats = [] }) {
   
   // Start music when component mounts or user interacts
   useEffect(() => {
-    // Add click listener for user interaction
     const handleClick = () => handleUserInteraction()
     document.addEventListener('click', handleClick)
     
-    // Also try to start immediately
     const timer = setTimeout(() => {
       console.log('Summary mounted, attempting to start music...')
       setShouldPlayMusic(true)
@@ -40,7 +37,6 @@ export default function Summary({ rightSwipedCats = [] }) {
     }
   }, [])
   
-  // Memoize instruction message to prevent recalculation
   const instructionMessage = useMemo(() => {
     const count = rightSwipedCats.length
     if (count >= 8) {
@@ -52,13 +48,12 @@ export default function Summary({ rightSwipedCats = [] }) {
     }
   }, [rightSwipedCats.length])
 
-  const handleKeepSwiping = () => {
+  const handleReplay = () => {
     window.location.reload()
   }
 
   return (
     <div className="summary-container">
-      {/* Left side - 3D Cat Model */}
       <div className="summary-left">
         <Canvas
           shadows
@@ -72,18 +67,16 @@ export default function Summary({ rightSwipedCats = [] }) {
           <BgAudio ref={audioRef} startMusic={shouldPlayMusic} volume={0.8} />
           <Cat instructionMessage={instructionMessage} position={[0, -1, 0]} />
           
-          {/* Instructions Box positioned above the cat */}
           <InstructionsBox 
             text={instructionMessage}
-            btnText="Keep Swiping!"
-            onButtonClick={handleKeepSwiping}
+            btnText="Replay"
+            onButtonClick={handleReplay}
             use3D={true}
             position={[0, 1.2, 0]}
           />
         </Canvas>
       </div>
 
-      {/* Right side - Gallery of right-swiped cats */}
       <div className="summary-right">
         <Gallery rightSwipedCats={rightSwipedCats} />
       </div>

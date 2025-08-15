@@ -31,10 +31,10 @@ export default function Cat({
   const currentAnimation = getAnimationForMessage()
   const isSleeping = currentAnimation === sleepAction
 
-  // Slow rotation for sleeping cat (flat spinning on Y axis)
+  // Slow rotation for sleeping cat
   useFrame((state, delta) => {
     if (catRef.current && isSleeping && !isHovered) {
-      catRef.current.rotation.y += delta * 0.3 // Flat spinning rotation
+      catRef.current.rotation.y += delta * 0.3
     }
   })
 
@@ -48,9 +48,8 @@ export default function Cat({
   }, [currentAnimation, greetingAction])
 
   const handlePointerEnter = () => {
-    // Reset rotation when hovering
     if (catRef.current && isSleeping) {
-      catRef.current.rotation.y = -0.55 // Reset to original Y rotation
+      catRef.current.rotation.y = -0.55
     }
     jumpAction.reset().play()
     jumpAction.crossFadeFrom(currentAnimation, 0.3)
