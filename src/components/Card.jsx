@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, useEffect } from 'react'
 import { useDrag } from '@use-gesture/react'
 import { getCatImageUrl, createSingleImageLoadHandlers } from '../utils/catUtility.js'
 import '../styles/Card.css'
@@ -6,6 +6,7 @@ import '../styles/Card.css'
 function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
   const cardRef = useRef()
   const [imageLoading, setImageLoading] = useState(true)
+  const [loadTimeout, setLoadTimeout] = useState(false)
   const [transform, setTransform] = useState({
     x: 0,
     y: 0,
@@ -13,11 +14,27 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
   })
   
   const imageHandlers = useMemo(() => 
-    createSingleImageLoadHandlers(setImageLoading), 
+    createSingleImageLoadHandlers((loading) => {
+      setImageLoading(loading)
+      if (!loading) setLoadTimeout(false)
+    }), 
     []
   )
 
   const imageUrl = useMemo(() => getCatImageUrl(data.id), [data.id])
+
+  // Mobile timeout detection - if image takes too long, show helpful message
+  useEffect(() => {
+    if (imageLoading) {
+      const timeoutId = setTimeout(() => {
+        if (imageLoading) {
+          setLoadTimeout(true)
+        }
+      }, 10000) // 10 second timeout for mobile
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [imageLoading])
 
   const bind = useDrag(
     ({ active, movement: [mx, my], velocity: [vx] }) => {
@@ -65,6 +82,18 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
         {imageLoading && (
           <div className="card-image-loading">
             <div className="loading-spinner"></div>
+            {loadTimeout && (
+              <div style={{ 
+                marginTop: '10px', 
+                fontSize: '12px', 
+                color: '#666',
+                textAlign: 'center',
+                padding: '0 20px'
+              }}>
+                Taking longer than usual... <br/>
+                Check your connection 📶
+              </div>
+            )}
           </div>
         )}
         <img 
@@ -72,6 +101,8 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
           alt={data.name}
           className="card-image"
           draggable={false}
+          loading="eager"
+          data-retry-count="0"
           {...imageHandlers}
         />
         <div className="card-image-fallback">

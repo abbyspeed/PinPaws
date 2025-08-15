@@ -14,9 +14,41 @@ export default function Match() {
   const [initialCards, setInitialCards] = useState([])
   const [bgColor, setBgColor] = useState('#ffffff')
   const [showSummary, setShowSummary] = useState(false)
+  const [audioEnabled, setAudioEnabled] = useState(false)
   
   const usedNames = useRef([])
   const usedBios = useRef([])
+  const audioRef = useRef(null)
+
+  // Initialize audio on first user interaction
+  useEffect(() => {
+    const initAudio = () => {
+      try {
+        audioRef.current = new Audio('./audio/meow.mp3')
+        audioRef.current.volume = 0.7
+        audioRef.current.preload = 'auto'
+        // Preload the audio for mobile
+        audioRef.current.load()
+        setAudioEnabled(true)
+      } catch (err) {
+        console.warn('Audio initialization failed:', err)
+      }
+    }
+
+    const handleFirstInteraction = () => {
+      initAudio()
+      document.removeEventListener('touchstart', handleFirstInteraction)
+      document.removeEventListener('click', handleFirstInteraction)
+    }
+
+    document.addEventListener('touchstart', handleFirstInteraction, { once: true })
+    document.addEventListener('click', handleFirstInteraction, { once: true })
+
+    return () => {
+      document.removeEventListener('touchstart', handleFirstInteraction)
+      document.removeEventListener('click', handleFirstInteraction)
+    }
+  }, [])
 
   useEffect(() => {
     if (apiCats.length > 0) {
@@ -33,16 +65,34 @@ export default function Match() {
   }, [apiCats])
 
   const playMeowSound = useCallback(() => {
+    if (!audioEnabled || !audioRef.current) return
+    
     try {
-      const audio = new Audio('./audio/meow.mp3')
-      audio.volume = 1
-      audio.play().catch(() => {
-        // console.log('Failed to play meow sound')
-      })
+      // Reset audio to beginning for rapid succession
+      audioRef.current.currentTime = 0
+      
+      // For mobile compatibility
+      const playPromise = audioRef.current.play()
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.warn('Audio play failed:', err)
+          // Try creating a new audio instance as fallback
+          try {
+            const fallbackAudio = new Audio('./audio/meow.mp3')
+            fallbackAudio.volume = 0.7
+            fallbackAudio.play().catch(() => {
+              // Silent fail for better UX
+            })
+          } catch (fallbackErr) {
+            // Silent fail
+          }
+        })
+      }
     } catch (err) {
-      // console.error('Error playing meow sound:', err)
+      console.warn('Error playing meow sound:', err)
     }
-  }, [])
+  }, [audioEnabled])
 
   const handleSwipe = useCallback((cardId, direction) => {
     const swipedCard = cards.find(card => card.id === cardId)

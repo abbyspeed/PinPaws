@@ -62,17 +62,45 @@ export const createImageLoadHandlers = (setLoadingState, catId) => {
   }
 }
 
-// Single image loading handlers (for Card component)
+// Single image loading handlers with mobile retry logic
 export const createSingleImageLoadHandlers = (setImageLoading) => {
   return {
+    onLoadStart: () => setImageLoading(true),
     onLoad: () => setImageLoading(false),
     onError: (e) => {
-      setImageLoading(false)
-      // Hide broken image and show fallback
       const target = e.target
+      const retryCount = parseInt(target.dataset.retryCount || '0')
+      
+      console.warn(`Image failed to load (attempt ${retryCount + 1})`)
+      
+      if (retryCount < 3) {
+        // Retry loading the same image up to 3 times
+        target.dataset.retryCount = (retryCount + 1).toString()
+        
+        setTimeout(() => {
+          if (target && target.src) {
+            // Force reload by adding timestamp
+            const originalSrc = target.src.split('&_retry=')[0]
+            target.src = `${originalSrc}&_retry=${Date.now()}`
+          }
+        }, 1000 * (retryCount + 1)) // Exponential backoff
+        
+        return // Don't show fallback yet
+      }
+      
+      // After 3 retries, show fallback
+      setImageLoading(false)
+      
+      // Hide broken image and show fallback
       const fallback = target.nextSibling
-      if (target) target.style.display = 'none'
-      if (fallback) fallback.style.display = 'flex'
+      if (target) {
+        target.style.display = 'none'
+        target.style.opacity = '0'
+      }
+      if (fallback) {
+        fallback.style.display = 'flex'
+        fallback.style.opacity = '1'
+      }
     }
   }
 }
