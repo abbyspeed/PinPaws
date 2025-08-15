@@ -1,6 +1,5 @@
-import { Perf } from 'r3f-perf'
 import { Suspense, useState, useRef, useMemo, useCallback } from 'react'
-import { Center, OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { Center, OrbitControls } from '@react-three/drei'
 import Title from './components/Title.jsx'
 import Cat from './components/Cat.jsx';
 import Heart from './components/Heart.jsx';
@@ -43,7 +42,7 @@ export default function Core({ onLearnMore }) {
       <ambientLight intensity={0.5} />
     </>
   ), [])
-  
+
   const memoizedControls = useMemo(() => (
     <OrbitControls 
       makeDefault
