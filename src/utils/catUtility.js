@@ -9,7 +9,6 @@ export const getColorByIndex = (index) => CAT_COLORS[index % CAT_COLORS.length]
 export const getUniqueRandomItem = (array, usedItems) => {
   const availableItems = array.filter(item => !usedItems.includes(item))
   if (availableItems.length === 0) {
-    // If all items have been used, reset and start over
     usedItems.length = 0
     return array[Math.floor(Math.random() * array.length)]
   }
@@ -53,7 +52,6 @@ export const createImageLoadHandlers = (setLoadingState, catId) => {
     onLoad: () => setLoadingState(prev => ({ ...prev, [catId]: false })),
     onError: (e) => {
       setLoadingState(prev => ({ ...prev, [catId]: false }))
-      // Hide broken image and show fallback
       const target = e.target
       const fallback = target.nextSibling?.nextSibling
       if (target) target.style.display = 'none'
@@ -73,25 +71,21 @@ export const createSingleImageLoadHandlers = (setImageLoading) => {
       
       console.warn(`Image failed to load (attempt ${retryCount + 1})`)
       
-      if (retryCount < 3) {
-        // Retry loading the same image up to 3 times
+      if (retryCount < 5) {
         target.dataset.retryCount = (retryCount + 1).toString()
         
         setTimeout(() => {
           if (target && target.src) {
-            // Force reload by adding timestamp
             const originalSrc = target.src.split('&_retry=')[0]
             target.src = `${originalSrc}&_retry=${Date.now()}`
           }
-        }, 1000 * (retryCount + 1)) // Exponential backoff
+        }, 1000 * (retryCount + 1))
         
-        return // Don't show fallback yet
+        return
       }
       
-      // After 3 retries, show fallback
       setImageLoading(false)
       
-      // Hide broken image and show fallback
       const fallback = target.nextSibling
       if (target) {
         target.style.display = 'none'

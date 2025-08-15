@@ -36,6 +36,24 @@ export default {
     {
         outDir: '../dist', 
         emptyOutDir: true, 
-        sourcemap: true 
+        sourcemap: true,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-dom'],
+                    three: ['@react-three/fiber', '@react-three/drei'],
+                    utils: ['@use-gesture/react']
+                }
+            }
+        },
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true
+            }
+        },
+        assetsInlineLimit: 4096,
+        chunkSizeWarningLimit: 1000
     },
 }

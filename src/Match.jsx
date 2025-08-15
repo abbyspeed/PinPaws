@@ -20,14 +20,12 @@ export default function Match() {
   const usedBios = useRef([])
   const audioRef = useRef(null)
 
-  // Initialize audio on first user interaction
   useEffect(() => {
     const initAudio = () => {
       try {
         audioRef.current = new Audio('./audio/meow.mp3')
         audioRef.current.volume = 0.7
         audioRef.current.preload = 'auto'
-        // Preload the audio for mobile
         audioRef.current.load()
         setAudioEnabled(true)
       } catch (err) {
@@ -68,24 +66,21 @@ export default function Match() {
     if (!audioEnabled || !audioRef.current) return
     
     try {
-      // Reset audio to beginning for rapid succession
       audioRef.current.currentTime = 0
       
-      // For mobile compatibility
       const playPromise = audioRef.current.play()
       
       if (playPromise !== undefined) {
         playPromise.catch(err => {
           console.warn('Audio play failed:', err)
-          // Try creating a new audio instance as fallback
           try {
             const fallbackAudio = new Audio('./audio/meow.mp3')
             fallbackAudio.volume = 0.7
             fallbackAudio.play().catch(() => {
-              // Silent fail for better UX
+              // console.warn('Fallback audio play failed')
             })
           } catch (fallbackErr) {
-            // Silent fail
+            // console.warn('Fallback audio initialization failed:', fallbackErr)
           }
         })
       }
@@ -130,7 +125,7 @@ export default function Match() {
     return (
       <div className="match-container" style={{ backgroundColor: bgColor }}>
         <div className="error-message">
-          <p>Oops! Having trouble loading cats 🙀</p>
+          <p>Oops! Having trouble loading cats</p>
           <p>Please try refreshing the page</p>
         </div>
       </div>
@@ -141,27 +136,8 @@ export default function Match() {
 
   return (
     <div className="match-container" style={{ backgroundColor: bgColor }}>
-      {/* Swipe Instructions */}
       {cards.length > 0 && (
-        <div className="swipe-instructions" style={{
-          position: 'absolute',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(255, 255, 255, 0.9)',
-          padding: '12px 24px',
-          borderRadius: '25px',
-          fontSize: '16px',
-          fontWeight: '500',
-          color: '#333',
-          textAlign: 'center',
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-          zIndex: 1000,
-          backdropFilter: 'blur(5px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}>
+        <div className="swipe-instructions">
           <span>✖️</span>
           <span style={{ margin: '0 5px' }}>Swipe your kitty</span>
           <span>❤️</span>

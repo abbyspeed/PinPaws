@@ -6,6 +6,7 @@ import '../styles/Card.css'
 function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
   const cardRef = useRef()
   const [imageLoading, setImageLoading] = useState(true)
+  const [imageError, setImageError] = useState(false)
   const [loadTimeout, setLoadTimeout] = useState(false)
   const [transform, setTransform] = useState({
     x: 0,
@@ -16,7 +17,10 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
   const imageHandlers = useMemo(() => 
     createSingleImageLoadHandlers((loading) => {
       setImageLoading(loading)
-      if (!loading) setLoadTimeout(false)
+      if (!loading) {
+        setLoadTimeout(false)
+        setImageError(false)
+      }
     }), 
     []
   )
@@ -103,10 +107,25 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
           draggable={false}
           loading="eager"
           data-retry-count="0"
+          style={{
+            display: imageError ? 'none' : 'block'
+          }}
           {...imageHandlers}
+          onError={(e) => {
+            console.warn('Image failed to load, showing fallback')
+            setImageError(true)
+            setImageLoading(false)
+            // Call the original error handler if it exists
+            if (imageHandlers.onError) {
+              imageHandlers.onError(e)
+            }
+          }}
         />
-        <div className="card-image-fallback">
+        <div className={`card-image-fallback ${imageError ? 'show' : ''}`}>
           🐱
+          <div style={{ fontSize: '14px', marginTop: '10px', color: '#999' }}>
+            Photo unavailable
+          </div>
         </div>
       </div>
       
