@@ -27,14 +27,13 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
 
   const imageUrl = useMemo(() => getCatImageUrl(data.id), [data.id])
 
-  // Mobile timeout detection - if image takes too long, show helpful message
   useEffect(() => {
     if (imageLoading) {
       const timeoutId = setTimeout(() => {
         if (imageLoading) {
           setLoadTimeout(true)
         }
-      }, 10000) // 10 second timeout for mobile
+      }, 5000)
 
       return () => clearTimeout(timeoutId)
     }
@@ -86,18 +85,6 @@ function Card({ data, index, isTop, onSwipe, onBackgroundChange }) {
         {imageLoading && (
           <div className="card-image-loading">
             <div className="loading-spinner"></div>
-            {loadTimeout && (
-              <div style={{ 
-                marginTop: '10px', 
-                fontSize: '12px', 
-                color: '#666',
-                textAlign: 'center',
-                padding: '0 20px'
-              }}>
-                Taking longer than usual... <br/>
-                Check your connection 📶
-              </div>
-            )}
           </div>
         )}
         <img 
