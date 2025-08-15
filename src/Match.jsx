@@ -66,26 +66,26 @@ export default function Match() {
     if (!audioEnabled || !audioRef.current) return
     
     try {
-      // Stop current playback and reset for consistent playback
-      audioRef.current.pause()
       audioRef.current.currentTime = 0
       
-      const playPromise = audioRef.current.play()
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          console.warn('Audio play failed:', err)
-          try {
-            const fallbackAudio = new Audio('./audio/meow.mp3')
-            fallbackAudio.volume = 0.7
-            fallbackAudio.play().catch(() => {
-              // console.warn('Fallback audio play failed')
-            })
-          } catch (fallbackErr) {
-            // console.warn('Fallback audio initialization failed:', fallbackErr)
-          }
-        })
-      }
+      setTimeout(() => {
+        const playPromise = audioRef.current.play()
+        
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Audio play failed:', err)
+            try {
+              const fallbackAudio = new Audio('./audio/meow.mp3')
+              fallbackAudio.volume = 0.7
+              fallbackAudio.play().catch(() => {
+                // console.warn('Fallback audio play failed')
+              })
+            } catch (fallbackErr) {
+              // console.warn('Fallback audio initialization failed:', fallbackErr)
+            }
+          })
+        }
+      }, 50)
     } catch (err) {
       console.warn('Error playing meow sound:', err)
     }
